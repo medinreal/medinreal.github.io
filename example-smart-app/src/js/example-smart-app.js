@@ -13,10 +13,10 @@ var globalSMART = null;
         globalSMART = smart;
         console.log("smart: ");
         console.log(smart);
-        //var patient = smart.patient;
-        var patient = smart.api.search({
-                    type: 'Patient'
-        });
+        var patient = smart.patient;
+        //var patient = smart.api.search({
+         //           type: 'Patient'
+       // });
         console.log(patient);
         var pt = patient.read();
         //var obv = smart.patient.api.fetchAll({
