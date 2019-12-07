@@ -1,3 +1,4 @@
+var globalSMART = null;
 (function(window){
   window.extractData = function() {
     var ret = $.Deferred();
@@ -9,9 +10,17 @@
 
     function onReady(smart)  {
       if (smart.hasOwnProperty('patient')) {
-        var patient = smart.patient;
+        globalSMART = smart;
+        console.log("smart: ");
+        console.log(smart);
+        //var patient = smart.patient;
+        var patient = smart.api.search({
+                    type: 'Patient'
+        });
+        console.log(patient);
         var pt = patient.read();
-        var obv = smart.patient.api.fetchAll({
+        //var obv = smart.patient.api.fetchAll({
+        var obv = smart.api.search({
                     type: 'Observation',
                     query: {
                       code: {
