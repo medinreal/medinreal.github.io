@@ -1,4 +1,79 @@
 var globalSMART = null;
+var globalObvs = null;
+
+Date.isGreater = function(date1, date2) {
+    var date1_ms = date1 === undefined ? new Date() : date1.getTime();
+    var date2_ms = date2 === undefined ? new Date() : date2.getTime();
+
+    if (date1_ms > date2_ms) {
+        return true;
+    }
+
+    return false;
+};
+
+var sortResults = function (list, date) {
+    for(var i = 0; i<list.length; i++) {
+        for(var j = list.length-1; j>i; j--) {
+            if( Date.isGreater( list[i][date], list[j][date] ) ) {
+                var tmp = list[j][date];
+                list[j][date] = list[i][date];
+                list[i][date] = tmp;
+            }
+        }
+    }
+    return list;
+};
+
+var getFormattedObservations = function(results) {
+    var list = [];
+    var observations = [];
+    console.log("Observations:")
+    results.forEach(function (obs) {
+        obs = obs.resource;
+        // console.log(obs);
+        var item = {};
+        if(obs.component !== undefined) {
+            var date = new Date(obs.issued);
+            obs.component.forEach(function (elem) {
+                item = {};
+                item.observation = elem.code.text!=undefined?elem.code.text:elem.code.coding[0].display;
+                try {
+                    item.value = Number(elem.valueQuantity.value).toFixed(2) + ' ' + elem.valueQuantity.unit;
+                } catch(e) {
+                    if(elem.valueCodeableConcept!=undefined)
+                        item.value = elem.valueCodeableConcept.text;
+                    else
+                        item.value = "N/A";
+                }
+                item.date = date;
+                list.push(item);
+            });
+        } else {
+            item = {};
+            // console.log(obs);
+            item.observation = obs.code.text!=undefined?obs.code.text:obs.code.coding[0].display;//obs.code.coding[0].display;
+            try {
+                item.value = Number(obs.valueQuantity.value).toFixed(2) + ' ' + obs.valueQuantity.unit;
+            } catch(e) {
+                if(obs.valueCodeableConcept!=undefined)
+                    item.value = obs.valueCodeableConcept.text;
+                else
+                    item.value = "N/A";
+    }
+            item.date = new Date(obs.effectiveDateTime==undefined?obs.issued:obs.effectiveDateTime);
+            list.push(item)
+        }
+    });
+
+    list.forEach(function (value) {
+        // observations = MedInReal.filterResults(observations, 'observation', 'date', value);
+        observations.push(value);
+    });
+
+    return sortResults(observations, 'date');
+};
+
 (function(window){
   window.extractData = function() {
     var ret = $.Deferred();
@@ -45,6 +120,8 @@ var globalSMART = null;
         $.when(pt, obv).done(function(patient, obv) {
           console.log('Observations: ');
           console.log(obv);
+          globalObvs = obv;
+          
           var byCodes = smart.byCodes(obv, 'code');
           var gender = patient.gender;
 
