@@ -133,8 +133,8 @@ var getFormattedObservations = function(results) {
             console.log(obv);
             console.log('AllergyIntolerance: ');
             console.log(allergy);
-            console.log('CarePlan: ');
-            console.log(careplan);
+//             console.log('CarePlan: ');
+//             console.log(careplan);
             console.log('Condition: ');
             console.log(condition);
             console.log('DiagnosticReport: ');
