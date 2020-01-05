@@ -116,7 +116,7 @@ var getFormattedObservations = function(results) {
         });
           
         var alrg = patient.request('AllergyIntolerance');
-        var crpn = patient.request('CarePlan');
+        //var crpn = patient.request('CarePlan');
         var cond = patient.request('Condition');
         var diag = patient.request('DiagnosticReport');
         var enct = patient.request('Encounter');
@@ -124,9 +124,9 @@ var getFormattedObservations = function(results) {
         var medo = patient.request('MedicationOrder');
         var proc = patient.request('Procedure');
 
-        $.when(pt, obv, alrg, crpn, cond, diag, enct, immn, medo, proc).fail(onError);
+        $.when(pt, obv, alrg, cond, diag, enct, immn, medo, proc).fail(onError);
 
-        $.when(pt, obv, alrg, crpn, cond, diag, enct, immn, medo, proc).done(function(patient, obv, allergy, careplan, condition, diagnostic, encounter, immunization, medication, procedure) {
+        $.when(pt, obv, alrg, cond, diag, enct, immn, medo, proc).done(function(patient, obv, allergy, condition, diagnostic, encounter, immunization, medication, procedure) {
             console.log('Patient: ');
             console.log(patient);
             console.log('Observations: ');
