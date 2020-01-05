@@ -114,14 +114,18 @@ var getFormattedObservations = function(results) {
             }
           }
         });
+          
+        var alrg = patient.request('AllergyIntolerance');
 
-        $.when(pt, obv).fail(onError);
+        $.when(pt, obv, alrg).fail(onError);
 
-        $.when(pt, obv).done(function(patient, obv) {
+        $.when(pt, obv, alrg).done(function(patient, obv, allergy) {
             console.log('Patient: ');
             console.log(patient);
             console.log('Observations: ');
             console.log(obv);
+            console.log('AllergyIntolerance: ');
+            console.log(allergy);
             globalObvs = obv;
           
             var byCodes = smart.byCodes(obv, 'code');
