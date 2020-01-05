@@ -116,16 +116,37 @@ var getFormattedObservations = function(results) {
         });
           
         var alrg = patient.request('AllergyIntolerance');
+        var crpn = patient.request('CarePlan');
+        var cond = patient.request('Condition');
+        var diag = patient.request('DiagnosticReport');
+        var enct = patient.request('Encounter');
+        var immn = patient.request('Immunization');
+        var medo = patient.request('MedicationOrder');
+        var proc = patient.request('Procedure');
 
-        $.when(pt, obv, alrg).fail(onError);
+        $.when(pt, obv, alrg, crpn, cond, diag, enct, immn, medo, proc).fail(onError);
 
-        $.when(pt, obv, alrg).done(function(patient, obv, allergy) {
+        $.when(pt, obv, alrg, crpn, cond, diag, enct, immn, medo, proc).done(function(patient, obv, allergy, careplan, condition, diagnostic, encounter, immunization, medication, procedure) {
             console.log('Patient: ');
             console.log(patient);
             console.log('Observations: ');
             console.log(obv);
             console.log('AllergyIntolerance: ');
             console.log(allergy);
+            console.log('CarePlan: ');
+            console.log(careplan);
+            console.log('Condition: ');
+            console.log(condition);
+            console.log('DiagnosticReport: ');
+            console.log(diagnostic);
+            console.log('Encounter: ');
+            console.log(encounter);
+            console.log('Immunization: ');
+            console.log(immunization);
+            console.log('MedicationOrder: ');
+            console.log(medication);
+            console.log('Procedure: ');
+            console.log(procedure);
             globalObvs = obv;
           
             var byCodes = smart.byCodes(obv, 'code');
